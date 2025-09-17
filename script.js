@@ -60,6 +60,10 @@ const studentsData = {
     student3: { name: "王小华", grade: "grade2", class: "class2", earnedStamps: [3, 6, 9, 10, 12], stampDates: {}, monthlyHistory: {} }
 };
 
+// 登录状态管理
+let isTeacherLoggedIn = false; // 教师登录状态
+const TEACHER_PASSWORD = 'WQXFXXX'; // 教师密码
+
 // 当前状态
 let currentUserType = 'teacher'; // 'teacher' 或 'parent'
 let currentStudentId = '';
@@ -77,6 +81,7 @@ const gradeSelect = document.getElementById('gradeSelect');
 const classSelect = document.getElementById('classSelect');
 const excelUpload = document.getElementById('excelUpload');
 const resetStampsBtn = document.getElementById('resetStampsBtn');
+const exportStatsBtn = document.getElementById('exportStatsBtn');
 const studentSearch = document.getElementById('studentSearch');
 const studentSelect = document.getElementById('studentSelect');
 const viewHistoryBtn = document.getElementById('viewHistoryBtn');
@@ -117,22 +122,25 @@ const historyContent = document.getElementById('historyContent');
 const closeHistory = document.getElementById('closeHistory');
 const categoryTabs = document.querySelectorAll('.category-tab');
 
+// 登录相关DOM元素
+const teacherLoginModal = document.getElementById('teacherLoginModal');
+const teacherPasswordInput = document.getElementById('teacherPassword');
+const loginBtn = document.getElementById('loginBtn');
+const switchToParentBtn = document.getElementById('switchToParentBtn');
+const loginError = document.getElementById('loginError');
+
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-    // 初始化界面
-    updateUIForUserType();
+    // 检查登录状态，如果没有登录则显示登录页面
+    if (!isTeacherLoggedIn) {
+        showTeacherLoginModal();
+    } else {
+        // 如果已登录，正常初始化界面
+        initializeMainInterface();
+    }
     
-    // 初始化班级选项
-    updateClassOptions();
-    
-    // 渲染印章网格
-    renderStamps();
-    
-    // 初始化进度显示
-    updateProgress();
-    
-    // 更新月份显示
-    updateCurrentMonth();
+    // 添加登录相关事件监听器
+    setupLoginEventListeners();
     
     // 事件监听器
     teacherBtn.addEventListener('click', () => switchUserType('teacher'));
@@ -152,6 +160,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('找不到 resetStampsBtn 元素！');
     }
+    
+    // 添加导出按钮事件监听器
+    if (exportStatsBtn) {
+        exportStatsBtn.addEventListener('click', handleExportStats);
+        console.log('导出统计表按钮事件监听器已添加');
+    } else {
+        console.error('找不到 exportStatsBtn 元素！');
+    }
+    
     studentSearch.addEventListener('input', handleStudentSearch);
     studentSelect.addEventListener('change', handleStudentChange);
     viewHistoryBtn.addEventListener('click', showStudentHistory);
@@ -186,6 +203,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 切换用户类型
 function switchUserType(type) {
+    // 如果切换到教师端但未登录，显示登录页面
+    if (type === 'teacher' && !isTeacherLoggedIn) {
+        showTeacherLoginModal();
+        return;
+    }
+    
     currentUserType = type;
     
     if (type === 'teacher') {
@@ -431,9 +454,9 @@ function renderHistoryContent(student) {
         return;
     }
     
-    // 计算能否成为榜样之星
+    // 计算能否成为榜样之星 - 使用新的评定标准（每个月都要5枚以上）
     const starMonths = months.filter(month => history[month].awards >= 5);
-    const canBeModelStar = starMonths.length >= 3; // 假设需要3个月以上获得5枚奖章
+    const canBeModelStar = months.length > 0 && starMonths.length === months.length; // 每个月都要获得5枚或以上奖章
     
     // 显示榜样之星状态
     if (canBeModelStar) {
@@ -441,8 +464,8 @@ function renderHistoryContent(student) {
         starDiv.className = 'star-status';
         starDiv.innerHTML = `
             <div style="text-align: center; margin-bottom: 20px; padding: 15px; background-color: #fff3cd; border-radius: 8px; border: 2px solid #ffd700;">
-                <h3 style="color: #ff6f00; margin: 0;">⭐ 恭喜！该学生已符合“榜样之星”条件 ⭐</h3>
-                <p style="margin: 5px 0 0 0; color: #856404;">已有${starMonths.length}个月份获得5枚或以上奖章</p>
+                <h3 style="color: #ff6f00; margin: 0;">⭐ 恭喜！该学生已符合"榜样之星"条件 ⭐</h3>
+                <p style="margin: 5px 0 0 0; color: #856404;">每个月都获得了5枚或以上奖章（${starMonths.length}/${months.length}个月全部达标）</p>
             </div>
         `;
         historyContent.appendChild(starDiv);
@@ -1165,6 +1188,16 @@ function handleExcelUpload(event) {
         return;
     }
     
+    // 添加确认提示 - 告知会清空历史数据
+    const gradeName = getGradeName(currentGrade);
+    const className = getClassName(currentClass);
+    const confirmMessage = `确认上传新的学生名单吗？\n\n⚠️ 重要提醒：\n上传新名单会清空 ${gradeName}${className} 所有学生的历史集章记录，包括：\n• 已获得的所有印章\n• 印章获得日期\n• 月度历史记录\n\n这个操作适用于新学期开始时重新集章。\n\n是否继续？`;
+    
+    if (!confirm(confirmMessage)) {
+        event.target.value = ''; // 用户取消，清空文件选择
+        return;
+    }
+    
     const reader = new FileReader();
     reader.onload = function(e) {
         try {
@@ -1185,11 +1218,16 @@ function handleExcelUpload(event) {
             // 更新学生数据
             updateStudentsData(students);
             
-            // 显示成功消息
-            showNotification(`成功为${getGradeName(currentGrade)}${getClassName(currentClass)}上传了${students.length}名学生！`);
+            // 清空当前选中的学生（因为学生数据已被重置）
+            currentStudentId = '';
+            studentSelect.value = '';
             
             // 更新学生列表
             updateStudentList();
+            
+            // 重新渲染印章和进度
+            renderStamps();
+            updateProgress();
             
             // 清空文件选择，允许重新上传
             event.target.value = '';
@@ -1306,33 +1344,54 @@ function updateStudentsData(newStudents) {
         return;
     }
     
+    // 新学期上传名单：先清空当前年级班级的所有学生数据
+    const gradeName = getGradeName(currentGrade);
+    const className = getClassName(currentClass);
+    
+    // 清空当前年级班级的所有学生数据
+    clearClassStudentsData(currentGrade, currentClass);
+    
+    let newStudentCount = 0;
+    
+    // 为所有新上传的学生创建全新的记录
     newStudents.forEach(student => {
-        // 检查是否已有同名学生在同年级同班级
-        const existingStudentId = Object.keys(studentsData).find(id => {
-            const existing = studentsData[id];
-            return existing.name === student.name && 
-                   existing.grade === student.grade && 
-                   existing.class === student.class;
-        });
-        
-        if (existingStudentId) {
-            // 如果学生已存在，保留其印章数据，只更新基本信息
-            console.log(`学生 ${student.name} 已存在，保留原有印章数据`);
-        } else {
-            // 如果是新学生，创建新记录
-            studentsData[student.id] = {
-                name: student.name,
-                grade: student.grade,
-                class: student.class,
-                earnedStamps: [],
-                stampDates: {}, // 添加印章获得日期记录
-                monthlyHistory: {} // 添加月度历史记录
-            };
-        }
+        // 创建新的学生记录，所有历史数据都重新开始
+        studentsData[student.id] = {
+            name: student.name,
+            grade: student.grade,
+            class: student.class,
+            earnedStamps: [], // 重新开始集章
+            stampDates: {}, // 重新记录日期
+            monthlyHistory: {} // 重新开始历史记录
+        };
+        newStudentCount++;
     });
+    
+    // 显示清空提示
+    showNotification(`新学期开始！已为${gradeName}${className}清空所有历史集章记录，重新上传了${newStudentCount}名学生。`);
     
     // 更新班级选项
     updateClassOptions();
+}
+
+// 清空指定班级的学生数据
+function clearClassStudentsData(grade, className) {
+    const studentsToRemove = [];
+    
+    // 找到需要清空的学生
+    Object.keys(studentsData).forEach(studentId => {
+        const student = studentsData[studentId];
+        if (student.grade === grade && student.class === className) {
+            studentsToRemove.push(studentId);
+        }
+    });
+    
+    // 删除这些学生的数据
+    studentsToRemove.forEach(studentId => {
+        delete studentsData[studentId];
+    });
+    
+    console.log(`已清空${getGradeName(grade)}${getClassName(className)}的${studentsToRemove.length}名学生的历史数据`);
 }
 
 // 处理学生搜索
@@ -1400,4 +1459,622 @@ function updateStudentSelectOptions(students) {
         currentStudentId = '';
         studentSelect.value = '';
     }
+}
+
+// ========== 登录相关功能 ==========
+
+// 显示教师登录模态框
+function showTeacherLoginModal() {
+    if (teacherLoginModal) {
+        teacherLoginModal.style.display = 'flex';
+        // 清空密码输入框
+        if (teacherPasswordInput) {
+            teacherPasswordInput.value = '';
+            teacherPasswordInput.focus();
+        }
+        // 隐藏错误消息
+        if (loginError) {
+            loginError.style.display = 'none';
+        }
+    }
+}
+
+// 隐藏教师登录模态框
+function hideTeacherLoginModal() {
+    if (teacherLoginModal) {
+        teacherLoginModal.style.display = 'none';
+    }
+}
+
+// 设置登录相关事件监听器
+function setupLoginEventListeners() {
+    // 登录按钮事件
+    if (loginBtn) {
+        loginBtn.addEventListener('click', handleTeacherLogin);
+    }
+    
+    // 密码输入框回车事件
+    if (teacherPasswordInput) {
+        teacherPasswordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleTeacherLogin();
+            }
+        });
+    }
+    
+    // 切换到家长端按钮事件
+    if (switchToParentBtn) {
+        switchToParentBtn.addEventListener('click', switchToParent);
+    }
+}
+
+// 处理教师登录
+function handleTeacherLogin() {
+    if (!teacherPasswordInput) {
+        showNotification('登录界面未正确加载！', 'error');
+        return;
+    }
+    
+    const password = teacherPasswordInput.value.trim();
+    
+    if (password === '') {
+        showLoginError('请输入密码');
+        return;
+    }
+    
+    if (password === TEACHER_PASSWORD) {
+        // 密码正确，登录成功
+        isTeacherLoggedIn = true;
+        hideTeacherLoginModal();
+        
+        // 初始化主界面
+        initializeMainInterface();
+        
+        // 设置为教师端
+        currentUserType = 'teacher';
+        switchUserType('teacher');
+        
+        showNotification('登录成功！欢迎使用教师端！');
+    } else {
+        // 密码错误
+        showLoginError('密码错误');
+        // 清空密码输入框
+        teacherPasswordInput.value = '';
+        teacherPasswordInput.focus();
+    }
+}
+
+// 显示登录错误信息
+function showLoginError(message) {
+    if (loginError) {
+        loginError.textContent = message;
+        loginError.style.display = 'block';
+        
+        // 3秒后自动隐藏
+        setTimeout(() => {
+            loginError.style.display = 'none';
+        }, 3000);
+    }
+}
+
+// 切换到家长端
+function switchToParent() {
+    // 隐藏登录模态框
+    hideTeacherLoginModal();
+    
+    // 初始化主界面
+    initializeMainInterface();
+    
+    // 设置为家长端
+    currentUserType = 'parent';
+    switchUserType('parent');
+    
+    showNotification('已切换到家长端');
+}
+
+// 初始化主界面
+function initializeMainInterface() {
+    // 初始化界面
+    updateUIForUserType();
+    
+    // 初始化班级选项
+    updateClassOptions();
+    
+    // 渲染印章网格
+    renderStamps();
+    
+    // 初始化进度显示
+    updateProgress();
+    
+    // 更新月份显示
+    updateCurrentMonth();
+}
+
+// ========== 导出统计表功能 ==========
+
+// 处理导出统计表
+function handleExportStats() {
+    console.log('导出统计表按钮被点击了！');
+    
+    // 检查是否选择了年级和班级
+    if (!currentGrade || !currentClass) {
+        showNotification('请先选择年级和班级！', 'error');
+        return;
+    }
+    
+    // 获取当前班级的所有学生
+    const classStudents = getClassStudents();
+    
+    if (classStudents.length === 0) {
+        showNotification('当前班级没有学生数据！', 'error');
+        return;
+    }
+    
+    // 显示处理提示
+    const gradeName = getGradeName(currentGrade);
+    const className = getClassName(currentClass);
+    showNotification(`正在为${gradeName}${className}生成学期集章统计表...`);
+    
+    try {
+        // 检查XLSX库是否可用
+        if (typeof XLSX === 'undefined') {
+            throw new Error('Excel库未正确加载，请刷新页面重试');
+        }
+        
+        // 生成并下载Excel文件
+        generateExcelReport(classStudents);
+        showNotification(`${gradeName}${className}学期集章统计表导出成功！`);
+    } catch (error) {
+        console.error('导出统计表时出错:', error);
+        showNotification(`导出失败：${error.message}`, 'error');
+    }
+}
+
+// 生成Excel报告
+function generateExcelReport(students) {
+    console.log('开始生成Excel报告，学生数量:', students.length);
+    
+    const workbook = XLSX.utils.book_new();
+    
+    // 为每个学生生成一个工作表
+    students.forEach((student, index) => {
+        console.log(`正在处理学生 ${index + 1}/${students.length}: ${student.name}`);
+        const worksheetData = generateStudentData(student);
+        console.log(`学生 ${student.name} 的数据行数:`, worksheetData.length);
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+        
+        // 添加单元格合并设置
+        const merges = generateMergeRanges(student, worksheetData);
+        if (merges.length > 0) {
+            worksheet['!merges'] = merges;
+        }
+        
+        // 设置列宽（动态根据月份数量）
+        const colWidths = [
+            {wch: 15}, // 教育目标列
+            {wch: 50}  // 评价细则列（较宽以容纳详细内容）
+        ];
+        
+        // 根据实际月份数量添加月份列宽（每个月份有两列：月份列 + 奖章列）
+        const monthlyHistory = student.monthlyHistory || {};
+        const currentEarnedStamps = student.earnedStamps || [];
+        const currentStampDates = student.stampDates || {};
+        let monthCount = Object.keys(monthlyHistory).length;
+        
+        // 如果有当前数据但没有历史记录，添加当前月份
+        if ((currentEarnedStamps.length > 0 || Object.keys(currentStampDates).length > 0) && monthCount === 0) {
+            monthCount = 1;
+        }
+        
+        // 每个月份需要两列：月份列 + 奖章列
+        for (let i = 0; i < monthCount; i++) {
+            colWidths.push({wch: 15}); // 月份列（宽一点以容纳日期）
+            colWidths.push({wch: 12}); // 奖章列
+        }
+        
+        worksheet['!cols'] = colWidths;
+        
+        // 移除固定行高设置，让Excel根据内容自动调整行高
+        // 这样可以支持单元格内容自动换行显示
+        
+        // 工作表名称（去除可能导致问题的特殊字符）
+        const sheetName = `${student.name}_集章统计`.replace(/[\\\/\[\]\*\?:]/g, '_');
+        XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    });
+    
+    // 生成文件名
+    const gradeName = getGradeName(currentGrade);
+    const className = getClassName(currentClass);
+    const currentDate = new Date().toLocaleDateString('zh-CN').replace(/\//g, '-');
+    const filename = `${gradeName}${className}_学期集章统计表_${currentDate}.xlsx`;
+    
+    // 导出文件
+    try {
+        XLSX.writeFile(workbook, filename);
+    } catch (writeError) {
+        console.error('XLSX.writeFile 失败，尝试备用方法:', writeError);
+        // 备用导出方法
+        const wbout = XLSX.write(workbook, {bookType:'xlsx', type:'array'});
+        const blob = new Blob([wbout], {type: 'application/octet-stream'});
+        
+        // 创建下载链接
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+}
+
+// 生成单个学生的数据（按照用户提供的表格模板格式）
+function generateStudentData(student) {
+    const data = [];
+    
+    console.log(`生成学生 ${student.name} 的数据`);
+    console.log('学生数据:', student);
+    
+    // 根据学生年级选择印章数据
+    const currentStampsData = student.grade === 'grade2' ? grade2StampsData : stampsData;
+    
+    // 获取学生的月度历史记录和当前数据
+    const monthlyHistory = student.monthlyHistory || {};
+    const currentEarnedStamps = student.earnedStamps || [];
+    const currentStampDates = student.stampDates || {};
+    
+    // 如果有当前数据但没有历史记录，创建当前月份的记录
+    const currentMonthKey = getCurrentMonthKey();
+    let allMonthsData = { ...monthlyHistory };
+    
+    // 如果学生有当前集章数据，添加到月份数据中
+    if (currentEarnedStamps.length > 0 || Object.keys(currentStampDates).length > 0) {
+        allMonthsData[currentMonthKey] = {
+            earnedStamps: currentEarnedStamps,
+            stampDates: currentStampDates,
+            awards: calculateMonthlyAwards(currentEarnedStamps, student.grade)
+        };
+    }
+    
+    const months = Object.keys(allMonthsData).sort();
+    
+    console.log('完整月度数据:', allMonthsData);
+    console.log('月份列表:', months);
+    console.log('当前月份数据:', {
+        currentEarnedStamps,
+        currentStampDates,
+        currentMonthKey
+    });
+    
+    // 判断是否为榜样之星
+    const isModelStar = checkIfModelStar(student);
+    console.log(`学生 ${student.name} 榜样之星判定结果: ${isModelStar}`);
+    
+    // 标题行
+    const gradeName = getGradeName(student.grade);
+    const className = getClassName(student.class);
+    data.push([
+        `班级：${gradeName}${className}`,
+        '',
+        `姓名：${student.name}`,
+        '',
+        '',
+        '',
+        '',
+        `是否评课为"榜样之星"（${isModelStar ? '是' : '否'}）`,
+        ''
+    ]);
+    
+    // 空行
+    data.push(['', '', '', '', '', '', '', '', '']);
+    
+    // 表头行
+    const headerRow = ['教育目标', '评价细则、要求、标准'];
+    // 添加动态月份列和对应的奖章列
+    if (months.length > 0) {
+        months.forEach(monthKey => {
+            const [year, month] = monthKey.split('-');
+            headerRow.push(`（${parseInt(month)}）月`);
+            headerRow.push('是否获得奖章');
+        });
+    }
+    // 如果没有历史记录，不添加月份列
+    data.push(headerRow);
+    
+    // 按类别组织数据
+    const categoryData = [
+        {
+            name: '学习榜样',
+            category: 'study',
+            rules: currentStampsData.filter(stamp => stamp.category === 'study')
+        },
+        {
+            name: '文明榜样',
+            category: 'behavior',
+            rules: currentStampsData.filter(stamp => stamp.category === 'behavior')
+        },
+        {
+            name: '纪律榜样',
+            category: 'teamwork',
+            rules: currentStampsData.filter(stamp => stamp.category === 'teamwork')
+        },
+        {
+            name: '劳动榜样',
+            category: 'responsibility',
+            rules: currentStampsData.filter(stamp => stamp.category === 'responsibility')
+        },
+        {
+            name: '团结榜样',
+            category: 'unity',
+            rules: currentStampsData.filter(stamp => stamp.category === 'unity')
+        },
+        {
+            name: '诚信榜样',
+            category: 'honesty',
+            rules: currentStampsData.filter(stamp => stamp.category === 'honesty')
+        },
+        {
+            name: '习惯榜样',
+            category: 'habit',
+            rules: currentStampsData.filter(stamp => stamp.category === 'habit')
+        },
+
+    ];
+    
+    // 生成每个类别的数据行
+    categoryData.forEach(categoryInfo => {
+        if (categoryInfo.rules.length === 0) return;
+        
+        // 检查该类别是否在所有月份都完成了所有细则
+        const categoryCompletionByMonth = {};
+        let hasAnyCompletion = false;
+        
+        if (months.length > 0) {
+            months.forEach(monthKey => {
+                const monthData = allMonthsData[monthKey];
+                const earnedStamps = monthData ? monthData.earnedStamps || [] : [];
+                const completedRulesInCategory = categoryInfo.rules.filter(rule => earnedStamps.includes(rule.id));
+                categoryCompletionByMonth[monthKey] = completedRulesInCategory.length === categoryInfo.rules.length;
+                if (completedRulesInCategory.length > 0) {
+                    hasAnyCompletion = true;
+                }
+            });
+        }
+        
+        categoryInfo.rules.forEach((rule, index) => {
+            const row = [];
+            
+            // 第一列：类别名称（只在第一行显示）
+            if (index === 0) {
+                row.push(categoryInfo.name);
+            } else {
+                row.push('');
+            }
+            
+            // 第二列：评价细则
+            row.push(`${index + 1}. ${rule.description}`);
+            
+            // 月份列：显示完成情况和日期，以及对应的奖章列
+            if (months.length > 0) {
+                months.forEach(monthKey => {
+                    const monthData = allMonthsData[monthKey];
+                    const earnedStamps = monthData ? monthData.earnedStamps || [] : [];
+                    const isCompleted = earnedStamps.includes(rule.id);
+                    
+                    console.log(`检查规则 ${rule.id} (${rule.name}) 在月份 ${monthKey}:`, {
+                        isCompleted,
+                        earnedStamps,
+                        stampDates: monthData ? monthData.stampDates : null
+                    });
+                    
+                    // 月份列：显示完成情况
+                    if (isCompleted) {
+                        // 显示完成日期
+                        const completionDate = monthData.stampDates && monthData.stampDates[rule.id] 
+                            ? monthData.stampDates[rule.id] 
+                            : '✓已完成';
+                        row.push(completionDate);
+                        console.log(`规则已完成，显示日期: ${completionDate}`);
+                    } else {
+                        // 未完成显示"×"
+                        row.push('×');
+                        console.log(`规则未完成，显示×`);
+                    }
+                    
+                    // 奖章列：只在该类别第一行且该月份完成所有细则时显示
+                    if (index === 0 && categoryCompletionByMonth[monthKey]) {
+                        row.push('已获得');
+                        console.log(`类别 ${categoryInfo.name} 在 ${monthKey} 获得奖章`);
+                    } else {
+                        row.push('');
+                    }
+                });
+            }
+            
+            data.push(row);
+        });
+    });
+    
+    return data;
+}
+
+// 生成合并单元格的范围
+function generateMergeRanges(student, worksheetData) {
+    const merges = [];
+    
+    // 根据学生年级选择印章数据
+    const currentStampsData = student.grade === 'grade2' ? grade2StampsData : stampsData;
+    
+    // 获取学生的完整月度数据
+    const monthlyHistory = student.monthlyHistory || {};
+    const currentEarnedStamps = student.earnedStamps || [];
+    const currentStampDates = student.stampDates || {};
+    const currentMonthKey = getCurrentMonthKey();
+    let allMonthsData = { ...monthlyHistory };
+    
+    if (currentEarnedStamps.length > 0 || Object.keys(currentStampDates).length > 0) {
+        allMonthsData[currentMonthKey] = {
+            earnedStamps: currentEarnedStamps,
+            stampDates: currentStampDates,
+            awards: calculateMonthlyAwards(currentEarnedStamps, student.grade)
+        };
+    }
+    
+    const months = Object.keys(allMonthsData).sort();
+    
+    if (months.length === 0) return merges;
+    
+    // 按类别组织数据
+    const categoryData = [
+        { name: '学习榜样', category: 'study', rules: currentStampsData.filter(stamp => stamp.category === 'study') },
+        { name: '文明榜样', category: 'behavior', rules: currentStampsData.filter(stamp => stamp.category === 'behavior') },
+        { name: '纪律榜样', category: 'teamwork', rules: currentStampsData.filter(stamp => stamp.category === 'teamwork') },
+        { name: '劳动榜样', category: 'responsibility', rules: currentStampsData.filter(stamp => stamp.category === 'responsibility') },
+        { name: '团结榜样', category: 'unity', rules: currentStampsData.filter(stamp => stamp.category === 'unity') },
+        { name: '诚信榜样', category: 'honesty', rules: currentStampsData.filter(stamp => stamp.category === 'honesty') },
+        { name: '习惯榜样', category: 'habit', rules: currentStampsData.filter(stamp => stamp.category === 'habit') }
+    ];
+    
+    // 计算数据开始行（标题行 + 空行 + 表头行 = 3行，所以数据从第4行开始，索引为3）
+    let currentRow = 3;
+    
+    // 为每个类别计算合并范围
+    categoryData.forEach(categoryInfo => {
+        if (categoryInfo.rules.length === 0) return;
+        
+        const categoryStartRow = currentRow;
+        const categoryEndRow = currentRow + categoryInfo.rules.length - 1;
+        
+        // 为每个月份的"是否获得奖章"列创建合并范围
+        months.forEach((monthKey, monthIndex) => {
+            // 奖章列的位置：第一列是教育目标，第二列是评价细则，然后是交替的月份列和奖章列
+            // 所以奖章列位置是：2 + monthIndex * 2 + 1 = 3 + monthIndex * 2
+            const medalColumnIndex = 3 + monthIndex * 2;
+            
+            // 检查该类别在这个月份是否完成
+            const monthData = allMonthsData[monthKey];
+            const earnedStamps = monthData ? monthData.earnedStamps || [] : [];
+            const completedRulesInCategory = categoryInfo.rules.filter(rule => earnedStamps.includes(rule.id));
+            const isCompleted = completedRulesInCategory.length === categoryInfo.rules.length;
+            
+            // 所有有多个细则的类别都进行合并单元格（无论是否完成）
+            if (categoryInfo.rules.length > 1) {
+                merges.push({
+                    s: { r: categoryStartRow, c: medalColumnIndex },  // 开始位置
+                    e: { r: categoryEndRow, c: medalColumnIndex }     // 结束位置
+                });
+            }
+        });
+        
+        currentRow += categoryInfo.rules.length;
+    });
+    
+    console.log('生成的合并范围:', merges);
+    return merges;
+}
+
+// 获取某月某类别的完成结果
+function getCategoryResultForMonth(monthData, category, stampsData) {
+    const categoryStamps = stampsData.filter(stamp => stamp.category === category);
+    const earnedStamps = monthData.earnedStamps || [];
+    
+    if (categoryStamps.length === 0) return '无此类别';
+    
+    // 检查该类别是否全部完成
+    const completedStamps = categoryStamps.filter(stamp => earnedStamps.includes(stamp.id));
+    const isCompleted = completedStamps.length === categoryStamps.length;
+    
+    if (isCompleted) {
+        return '已获得🏅';
+    }
+    
+    // 计算完成情况
+    const completedCount = completedStamps.length;
+    const totalCount = categoryStamps.length;
+    
+    // 如果有部分完成，显示进度
+    if (completedCount > 0) {
+        return `${completedCount}/${totalCount} 项完成`;
+    } else {
+        return '未开始';
+    }
+}
+
+// 判断学生是否为榜样之星（新的评定标准）
+function isModelStar(student) {
+    const monthlyHistory = student.monthlyHistory || {};
+    const months = Object.keys(monthlyHistory);
+    
+    // 统计每月获得5枚或以上奖章的月份数
+    let qualifiedMonths = 0;
+    months.forEach(monthKey => {
+        const monthData = monthlyHistory[monthKey];
+        if (monthData.awards >= 5) {
+            qualifiedMonths++;
+        }
+    });
+    
+    // 需要每个月都获得5枚或以上奖章才能成为榜样之星
+    return months.length > 0 && qualifiedMonths === months.length;
+}
+
+// 检查学生是否为榜样之星（用于新的导出格式）
+function checkIfModelStar(student) {
+    const monthlyHistory = student.monthlyHistory || {};
+    const currentEarnedStamps = student.earnedStamps || [];
+    const currentStampDates = student.stampDates || {};
+    
+    console.log(`检查学生 ${student.name} 是否为榜样之星:`);
+    console.log('- 历史记录:', monthlyHistory);
+    console.log('- 当前奖章:', currentEarnedStamps);
+    
+    // 如果有当前数据但没有历史记录，创建当前月份的记录
+    const currentMonthKey = getCurrentMonthKey();
+    let allMonthsData = { ...monthlyHistory };
+    
+    // 如果学生有当前集章数据，添加到月份数据中
+    if (currentEarnedStamps.length > 0 || Object.keys(currentStampDates).length > 0) {
+        const currentAwards = calculateMonthlyAwards(currentEarnedStamps, student.grade);
+        allMonthsData[currentMonthKey] = {
+            earnedStamps: currentEarnedStamps,
+            stampDates: currentStampDates,
+            awards: currentAwards
+        };
+        console.log(`- 当前月份 ${currentMonthKey} 奖章数: ${currentAwards}`);
+    }
+    
+    const months = Object.keys(allMonthsData).sort();
+    console.log('- 所有月份:', months);
+    
+    if (months.length === 0) {
+        console.log('- 没有任何月份数据，不能成为榜样之星');
+        return false;
+    }
+    
+    // 统计每月获得5枚或以上奖章的月份数
+    let qualifiedMonths = 0;
+    let monthDetails = [];
+    
+    months.forEach(monthKey => {
+        const monthData = allMonthsData[monthKey];
+        const monthAwards = monthData ? monthData.awards : 0;
+        const isQualified = monthAwards >= 5;
+        
+        monthDetails.push(`${monthKey}: ${monthAwards}枚奖章 ${isQualified ? '✓达标' : '✗未达标'}`);
+        
+        if (isQualified) {
+            qualifiedMonths++;
+        }
+    });
+    
+    console.log('- 各月份奖章情况:');
+    monthDetails.forEach(detail => console.log(`  ${detail}`));
+    console.log(`- 达标月份: ${qualifiedMonths}/${months.length}`);
+    
+    // 需要每个月都获得5枚或以上奖章才能成为榜样之星
+    const isModelStar = qualifiedMonths === months.length && months.length > 0;
+    console.log(`- 最终结果: ${isModelStar ? '是榜样之星 ⭐' : '不是榜样之星'}`);
+    
+    return isModelStar;
 }

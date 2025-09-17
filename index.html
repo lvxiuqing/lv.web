@@ -50,6 +50,9 @@
                         <button id="resetStampsBtn" class="reset-stamps-btn">
                             <i class="fas fa-redo"></i> 重新集章
                         </button>
+                        <button id="exportStatsBtn" class="export-stats-btn">
+                            <i class="fas fa-download"></i> 导出本学期集章统计表
+                        </button>
                     </div>
                 </div>
                 <div class="student-selection">
@@ -220,6 +223,35 @@
                 <div id="historyContent">
                     <!-- 历史内容将通过JavaScript动态生成 -->
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 教师登录模态框 -->
+    <div class="modal" id="teacherLoginModal" style="display: block;">
+        <div class="modal-content login-modal">
+            <div class="modal-header login-header">
+                <h2>教师端登录</h2>
+                <p class="login-subtitle">武强县府兴小学小榜样集章系统</p>
+            </div>
+            <div class="modal-body login-body">
+                <div class="login-form">
+                    <div class="form-group">
+                        <label for="teacherAccount">账号</label>
+                        <input type="text" id="teacherAccount" value="武强县府兴小学小榜样集章系统" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacherPassword">密码</label>
+                        <input type="password" id="teacherPassword" placeholder="请输入教师密码">
+                    </div>
+                    <div class="error-message" id="loginError" style="display: none;">
+                        密码错误
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer login-footer">
+                <button id="loginBtn" class="btn-primary login-btn">登录</button>
+                <button id="switchToParentBtn" class="btn-secondary">切换到家长端</button>
             </div>
         </div>
     </div>
