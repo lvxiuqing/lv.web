@@ -4,7 +4,7 @@ const stampsData = [
     { id: 2, name: "能够按时完成老师所布置的作业、任务", category: "study", icon: "fa-comments", description: "能够按时完成老师所布置的作业、任务" },
     { id: 3, name: "铃响前进入到教室，并能提前准备好本堂课所需要科目的课本、练习册，习题本", category: "study", icon: "fa-book-open", description: "铃响前进入到教室，并能提前准备好本堂课所需要科目的课本、练习册，习题本" },
     { id: 4, name: "课上有意识的专注听讲，积极发言", category: "study", icon: "fa-graduation-cap", description: "课上有意识的专注听讲，积极发言" },
-    { id: 4, name: "文明如厕不随地吐痰，不乱扔垃圾", category: "behavior", icon: "fa-handshake", description: "文明如厕不随地吐痰，不乱扔垃圾" },
+    { id: 20, name: "文明如厕不随地吐痰，不乱扔垃圾", category: "behavior", icon: "fa-handshake", description: "文明如厕不随地吐痰，不乱扔垃圾" },
     { id: 5, name: "不在桌椅、教室、图书上乱涂乱画", category: "behavior", icon: "fa-certificate", description: "不在桌椅、教室、图书上乱涂乱画" },
     { id: 6, name: "不破坏学校的公共设施、设备", category: "behavior", icon: "fa-heart", description: "不破坏学校的公共设施、设备" },
     { id: 7, name: "积进入校园后，按照路线行走，不推不挤，不跑", category: "teamwork", icon: "fa-users", description: "积进入校园后，按照路线行走，不推不挤，不跑" },
@@ -12,7 +12,7 @@ const stampsData = [
     { id: 9, name: "尽量不迟到，迟到要从前门喊报告", category: "teamwork", icon: "fa-people-arrows", description: "尽量不迟到，迟到要从前门喊报告" },
     { id: 10, name: "任何时间不和同学打闹，不欺负、欺凌同学", category: "teamwork", icon: "fa-comments", description: "任何时间不和同学打闹，不欺负、欺凌同学" },
     { id: 11, name: "作为值日生认真完成当天的值日活动，保持教室的干净整洁", category: "responsibility", icon: "fa-shield-alt", description: "作为值日生认真完成当天的值日活动，保持教室的干净整洁" },
-    { id: 11, name: "能够及时清理自己的书包、书桌等，保持好个人卫生", category: "responsibility", icon: "fa-check-circle", description: "能够及时清理自己的书包、书桌等，保持好个人卫生" },
+    { id: 12, name: "能够及时清理自己的书包、书桌等，保持好个人卫生", category: "responsibility", icon: "fa-check-circle", description: "能够及时清理自己的书包、书桌等，保持好个人卫生" },
     { id: 13, name: "日常和同学友好相处，不排挤欺负同学", category: "unity", icon: "fa-people-arrows", description: "日常和同学友好相处，不排挤欺负同学" },
     { id: 14, name: "积极参与完成小组活动和任务", category: "unity", icon: "fa-flag", description: "积极参与完成小组活动和任务" },
     { id: 15, name: "未完成作业时勇敢承认，不找任何理由", category: "honesty", icon: "fa-certificate", description: "未完成作业时勇敢承认，不找任何理由" },
@@ -31,15 +31,15 @@ const grade2StampsData = [
     { id: 105, name: "遇到不会解决的问题，不放弃，反复思考，或请教他人", category: "study", icon: "fa-clock", description: "遇到不会解决的问题，不放弃，反复思考，或请教他人" },
     { id: 106, name: "文明如厕，不随地吐痰，不乱扔垃圾", category: "behavior", icon: "fa-leaf", description: "文明如厕，不随地吐痰，不乱扔垃圾" },
     { id: 107, name: "不在桌椅、教室、图书上乱涂乱画", category: "behavior", icon: "fa-hands-helping", description: "不在桌椅、教室、图书上乱涂乱画" },
-    { id: 107, name: "不破坏学校的公共设施、设备", category: "behavior", icon: "fa-volume-down", description: "不破坏学校的公共设施、设备" },
+    { id: 200, name: "不破坏学校的公共设施、设备", category: "behavior", icon: "fa-volume-down", description: "不破坏学校的公共设施、设备" },
     { id: 108, name: "不讲脏话，不做任何不文明的手势动作", category: "behavior", icon: "fa-shield-alt", description: "不讲脏话，不做任何不文明的手势动作" },
     { id: 109, name: "不给老师、同学起绰号", category: "behavior", icon: "fa-shield-alt", description: "不给老师、同学起绰号" },
-    { id: 109, name: "进入校园后，按照路线行走，不推不挤，不跑", category: "teamwork", icon: "fa-users", description: "进入校园后，按照路线行走，不推不挤，不跑" },
+    { id: 201, name: "进入校园后，按照路线行走，不推不挤，不跑", category: "teamwork", icon: "fa-users", description: "进入校园后，按照路线行走，不推不挤，不跑" },
     { id: 110, name: "进入教学楼后靠右行走，不追逐打闹", category: "teamwork", icon: "fa-flag", description: "进入教学楼后靠右行走，不追逐打闹" },
     { id: 111, name: "尽量不迟到，迟到要从前门喊报告", category: "teamwork", icon: "fa-gavel", description: "尽量不迟到，迟到要从前门喊报告" },
     { id: 112, name: "任何时间不和同学打闹，不欺负、欺凌同学", category: "teamwork", icon: "fa-sort-amount-up", description: "任何时间不和同学打闹，不欺负、欺凌同学" },
     { id: 113, name: "进入教室后，保持安静，快速进入读书、写字等学习状态", category: "teamwork", icon: "fa-clock", description: "进入教室后，保持安静，快速进入读书、写字等学习状态" },
-    { id: 113, name: "作为值日生认真完成当天的值日活动，保持教室的干净整洁", category: "responsibility", icon: "fa-broom", description: "作为值日生认真完成当天的值日活动，保持教室的干净整洁" },
+    { id: 202, name: "作为值日生认真完成当天的值日活动，保持教室的干净整洁", category: "responsibility", icon: "fa-broom", description: "作为值日生认真完成当天的值日活动，保持教室的干净整洁" },
     { id: 114, name: "能够及时清理自己的书包、书桌等，保持好个人卫生", category: "responsibility", icon: "fa-lock", description: "能够及时清理自己的书包、书桌等，保持好个人卫生" },
     { id: 115, name: "在家能够帮助父母做一些力所能及的事", category: "responsibility", icon: "fa-clock", description: "在家能够帮助父母做一些力所能及的事" },
     { id: 117, name: "日常和同学友好相处，不排挤欺负同学", category: "unity", icon: "fa-handshake", description: "日常和同学友好相处，不排挤欺负同学" },
@@ -57,7 +57,11 @@ const grade2StampsData = [
 const studentsData = {
     student1: { name: "张小明", grade: "grade1", class: "class1", earnedStamps: [1, 4, 7], stampDates: {}, monthlyHistory: {} },
     student2: { name: "李小红", grade: "grade1", class: "class1", earnedStamps: [2, 5, 8, 11], stampDates: {}, monthlyHistory: {} },
-    student3: { name: "王小华", grade: "grade2", class: "class2", earnedStamps: [3, 6, 9, 10, 12], stampDates: {}, monthlyHistory: {} }
+    student3: { name: "王小华", grade: "grade2", class: "class2", earnedStamps: [3, 6, 9, 10, 12], stampDates: {}, monthlyHistory: {} },
+    student4: { name: "赵小丽", grade: "grade1", class: "class2", earnedStamps: [1, 2, 3], stampDates: {}, monthlyHistory: {} },
+    student5: { name: "刘小强", grade: "grade2", class: "class1", earnedStamps: [101, 102, 103, 104], stampDates: {}, monthlyHistory: {} },
+    student6: { name: "陈小美", grade: "grade3", class: "class1", earnedStamps: [1, 5, 9, 13], stampDates: {}, monthlyHistory: {} },
+    student7: { name: "孙小勇", grade: "grade3", class: "class2", earnedStamps: [2, 6, 10], stampDates: {}, monthlyHistory: {} }
 };
 
 // 登录状态管理
@@ -77,8 +81,11 @@ let selectedStampForBatch = null; // 选中的印章用于批量操作
 const teacherBtn = document.getElementById('teacherBtn');
 const parentBtn = document.getElementById('parentBtn');
 const teacherControls = document.getElementById('teacherControls');
+const parentControls = document.getElementById('parentControls');
 const gradeSelect = document.getElementById('gradeSelect');
 const classSelect = document.getElementById('classSelect');
+const parentGradeSelect = document.getElementById('parentGradeSelect');
+const parentClassSelect = document.getElementById('parentClassSelect');
 const excelUpload = document.getElementById('excelUpload');
 const resetStampsBtn = document.getElementById('resetStampsBtn');
 const exportStatsBtn = document.getElementById('exportStatsBtn');
@@ -131,13 +138,14 @@ const loginError = document.getElementById('loginError');
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-    // 检查登录状态，如果没有登录则显示登录页面
-    if (!isTeacherLoggedIn) {
-        showTeacherLoginModal();
-    } else {
-        // 如果已登录，正常初始化界面
-        initializeMainInterface();
-    }
+    // 默认显示教师端，需要登录
+    currentUserType = 'teacher';
+    
+    // 初始化主界面
+    initializeMainInterface();
+    
+    // 设置为教师端
+    switchUserType('teacher');
     
     // 添加登录相关事件监听器
     setupLoginEventListeners();
@@ -147,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
     parentBtn.addEventListener('click', () => switchUserType('parent'));
     gradeSelect.addEventListener('change', handleGradeChange);
     classSelect.addEventListener('change', handleClassChange);
+    parentGradeSelect.addEventListener('change', handleParentGradeChange);
+    parentClassSelect.addEventListener('change', handleParentClassChange);
     excelUpload.addEventListener('change', handleExcelUpload);
     
     // 添加调试信息
@@ -228,13 +238,23 @@ function updateUIForUserType() {
     if (currentUserType === 'parent') {
         // 家长端只能查看，不能授予印章
         awardStampBtn.style.display = 'none';
-        // 隐藏教师控制区域
+        // 隐藏教师控制区域，显示家长控制区域
         teacherControls.style.display = 'none';
+        parentControls.style.display = 'flex';
+        // 家长端可以查看历史
+        if (currentStudentId) {
+            viewHistoryBtn.style.display = 'flex';
+        }
     } else {
         // 教师端可以授予印章
         awardStampBtn.style.display = 'block';
-        // 显示教师控制区域
+        // 显示教师控制区域，隐藏家长控制区域
         teacherControls.style.display = 'flex';
+        parentControls.style.display = 'none';
+        // 教师端的历史查看也需要选择学生
+        if (currentStudentId) {
+            viewHistoryBtn.style.display = 'flex';
+        }
     }
     
     // 重新渲染印章以反映权限变化
@@ -246,7 +266,8 @@ function handleStudentChange() {
     currentStudentId = studentSelect.value;
     
     // 显示或隐藏查看历史按钮
-    if (currentStudentId && currentUserType === 'teacher') {
+    if (currentStudentId) {
+        // 在教师端和家长端都可以查看历史
         viewHistoryBtn.style.display = 'flex';
     } else {
         viewHistoryBtn.style.display = 'none';
@@ -258,11 +279,23 @@ function handleStudentChange() {
 
 // 渲染印章网格
 function renderStamps() {
+    console.log('=== renderStamps 开始执行 ===');
+    console.log('当前状态:', {
+        currentStudentId,
+        currentCategory,
+        currentUserType
+    });
+    
     stampGrid.innerHTML = '';
     
-    // 如果没有选择学生，显示提示信息
+    // 如果没有选择学生，根据用户类型显示不同的界面
     if (!currentStudentId) {
-        stampGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">请先选择年级、班级和学生</p>';
+        console.log('没有选择学生，显示预览模式');
+        if (currentUserType === 'teacher') {
+            renderStampsForTeacher();
+        } else {
+            renderStampsForPreview();
+        }
         return;
     }
     
@@ -270,31 +303,321 @@ function renderStamps() {
     const student = studentsData[currentStudentId];
     const earnedStamps = student ? student.earnedStamps : [];
     
+    console.log('学生信息:', {
+        studentId: currentStudentId,
+        student,
+        earnedStamps
+    });
+    
     // 根据学生年级选择印章数据
     let currentStampsData;
     if (student && student.grade === 'grade2') {
         currentStampsData = grade2StampsData;
+        console.log('使用二年级印章数据，总数:', currentStampsData.length);
     } else {
         currentStampsData = stampsData;
+        console.log('使用一年级印章数据，总数:', currentStampsData.length);
     }
+    
+    console.log('当前类别:', currentCategory);
     
     // 根据类别筛选印章
     const filteredStamps = currentCategory === 'all' 
         ? currentStampsData 
         : currentStampsData.filter(stamp => stamp.category === currentCategory);
     
+    console.log('筛选结果:', {
+        category: currentCategory,
+        totalStamps: currentStampsData.length,
+        filteredCount: filteredStamps.length,
+        filteredStamps: filteredStamps.map(s => ({ 
+            id: s.id, 
+            name: s.name.substring(0, 20) + '...', 
+            category: s.category 
+        }))
+    });
+    
     // 如果没有印章数据，显示提示
     if (filteredStamps.length === 0) {
+        console.log('没有找到印章，显示提示信息');
         stampGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">该类别下暂无印章</p>';
         return;
     }
     
+    console.log('开始渲染', filteredStamps.length, '个印章');
+    
     // 渲染每个印章
-    filteredStamps.forEach(stamp => {
+    filteredStamps.forEach((stamp, index) => {
         const isEarned = earnedStamps.includes(stamp.id);
+        console.log(`渲染印章 ${index + 1}:`, {
+            id: stamp.id,
+            name: stamp.name.substring(0, 15) + '...',
+            category: stamp.category,
+            isEarned
+        });
         const stampEl = createStampElement(stamp, isEarned);
+        console.log('创建的印章元素:', stampEl);
+        console.log('印章元素HTML:', stampEl.outerHTML.substring(0, 200) + '...');
+            
+        // 检查stampGrid的状态
+        console.log('stampGrid元素:', stampGrid);
+        console.log('stampGrid的样式:', {
+            display: getComputedStyle(stampGrid).display,
+            visibility: getComputedStyle(stampGrid).visibility,
+            opacity: getComputedStyle(stampGrid).opacity,
+            height: getComputedStyle(stampGrid).height,
+            width: getComputedStyle(stampGrid).width,
+            overflow: getComputedStyle(stampGrid).overflow
+        });
+            
+        stampGrid.appendChild(stampEl);
+        
+        // 强制确保印章元素可见
+        stampEl.style.cssText += 'display: flex !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 2 !important; background: #ffffff !important; border: 2px solid #ff0000 !important;';
+        
+        console.log('已添加到stampGrid，当前stampGrid子元素数量:', stampGrid.children.length);
+            
+        // 检查添加后的印章元素状态
+        console.log('印章元素在DOM中的状态:', {
+            offsetWidth: stampEl.offsetWidth,
+            offsetHeight: stampEl.offsetHeight,
+            clientWidth: stampEl.clientWidth,
+            clientHeight: stampEl.clientHeight,
+            display: getComputedStyle(stampEl).display,
+            visibility: getComputedStyle(stampEl).visibility,
+            opacity: getComputedStyle(stampEl).opacity
+        });
+    });
+    
+    // 强制确保stampGrid和印章可见
+    stampGrid.style.cssText += 'display: grid !important; visibility: visible !important; opacity: 1 !important; position: relative !important; z-index: 1 !important;';
+    
+    console.log('已强制设置stampGrid样式:', {
+        display: getComputedStyle(stampGrid).display,
+        visibility: getComputedStyle(stampGrid).visibility,
+        opacity: getComputedStyle(stampGrid).opacity,
+        position: getComputedStyle(stampGrid).position,
+        zIndex: getComputedStyle(stampGrid).zIndex
+    });
+    
+    // 检查最终的DOM状态
+    console.log('stampGrid最终状态:', {
+        element: stampGrid,
+        childCount: stampGrid.children.length,
+        innerHTML: stampGrid.innerHTML.length > 0 ? '有内容' : '无内容',
+        visible: stampGrid.style.display !== 'none',
+        offsetHeight: stampGrid.offsetHeight,
+        offsetWidth: stampGrid.offsetWidth
+    });
+    
+    console.log('=== renderStamps 执行完成 ===');
+}
+
+// 为教师端渲染印章（未选择学生时）
+function renderStampsForTeacher() {
+    // 显示提示信息
+    const tipEl = document.createElement('div');
+    tipEl.className = 'stamp-teacher-tip';
+    tipEl.innerHTML = `
+        <div style="text-align: center; color: #666; padding: 20px; background: #e3f2fd; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #2196f3;">
+            <i class="fas fa-chalkboard-teacher" style="font-size: 24px; color: #2196f3; margin-bottom: 10px;"></i>
+            <p style="margin: 0; font-size: 16px; font-weight: 500; color: #1976d2;">教师端：请先选择年级、班级和学生进行集章管理</p>
+            <p style="margin: 5px 0 0 0; font-size: 14px; color: #666;">以下显示所有榜样细则，选择学生后可进行标记和批量操作</p>
+        </div>
+    `;
+    stampGrid.appendChild(tipEl);
+    
+    // 选择要显示的印章数据
+    let teacherStampsData = stampsData;
+    
+    // 如果选择了特定年级，显示对应年级的印章
+    if (currentGrade === 'grade2') {
+        teacherStampsData = grade2StampsData;
+    }
+    
+    // 根据类别筛选印章
+    const filteredStamps = currentCategory === 'all' 
+        ? teacherStampsData 
+        : teacherStampsData.filter(stamp => stamp.category === currentCategory);
+    
+    // 如果没有印章数据，显示提示
+    if (filteredStamps.length === 0) {
+        const noStampsEl = document.createElement('p');
+        noStampsEl.style.cssText = 'grid-column: 1/-1; text-align: center; color: #999; padding: 40px;';
+        noStampsEl.textContent = '该类别下暂无印章';
+        stampGrid.appendChild(noStampsEl);
+        return;
+    }
+    
+    // 渲染每个印章（教师模式 - 显示操作按钮但禁用）
+    filteredStamps.forEach(stamp => {
+        const stampEl = createStampElementForTeacher(stamp);
         stampGrid.appendChild(stampEl);
     });
+}
+
+// 创建教师端印章元素（未选择学生时）
+function createStampElementForTeacher(stamp) {
+    const stampEl = document.createElement('div');
+    stampEl.className = 'stamp-item teacher-preview-mode';
+    stampEl.dataset.stampId = stamp.id;
+    
+    // 截取印章名称，如果太长则显示省略号
+    const displayName = stamp.name.length > 25 ? stamp.name.substring(0, 25) + '...' : stamp.name;
+    
+    stampEl.innerHTML = `
+        <div class="stamp-icon">
+            <i class="fas ${stamp.icon}"></i>
+        </div>
+        <div class="stamp-name" title="${stamp.name}">${displayName}</div>
+        <div class="stamp-category">${getCategoryName(stamp.category)}</div>
+        <div class="stamp-actions teacher-preview">
+            <button class="batch-select-btn" data-stamp-id="${stamp.id}" title="选择学生后可进行批量操作" disabled>
+                <i class="fas fa-check-square"></i>
+            </button>
+        </div>
+        <div class="teacher-preview-overlay">
+            <i class="fas fa-user-graduate"></i>
+        </div>
+    `;
+    
+    // 添加点击事件（只能查看，不能操作）
+    stampEl.addEventListener('click', (e) => {
+        // 如果点击的是批量选择按钮，阻止事件冒泡并显示提示
+        if (e.target.closest('.batch-select-btn')) {
+            e.stopPropagation();
+            showNotification('请先选择年级、班级和学生后再进行批量操作！', 'error');
+            return;
+        }
+        
+        // 打开印章详情模态框（教师预览模式）
+        openStampModalForTeacherPreview(stamp);
+    });
+    
+    return stampEl;
+}
+
+// 打开教师端预览模态框
+function openStampModalForTeacherPreview(stamp) {
+    modalTitle.textContent = stamp.name;
+    modalStampImage.innerHTML = `<i class="fas ${stamp.icon}"></i>`;
+    modalDescription.textContent = stamp.description;
+    modalDate.textContent = '';
+    modalTeacher.textContent = '';
+    
+    // 显示教师端提示信息
+    const teacherTip = document.createElement('div');
+    teacherTip.className = 'teacher-modal-tip';
+    teacherTip.innerHTML = `
+        <div style="background: #e3f2fd; padding: 12px; border-radius: 6px; margin: 10px 0; border-left: 4px solid #2196f3;">
+            <p style="margin: 0; font-size: 14px; color: #1976d2;">
+                <i class="fas fa-info-circle"></i> 教师端：选择学生后可为其标记此项目为“已完成”
+            </p>
+        </div>
+    `;
+    
+    // 在描述后添加提示
+    modalDescription.parentNode.insertBefore(teacherTip, modalDescription.nextSibling);
+    
+    // 隐藏操作按钮
+    awardStampBtn.style.display = 'none';
+    
+    // 清除模态框数据
+    modal.dataset.stampId = '';
+    modal.dataset.action = '';
+    
+    // 显示模态框
+    modal.style.display = 'flex';
+}
+
+// 渲染印章预览（用于未选择学生时显示）
+function renderStampsForPreview() {
+    // 显示提示信息
+    const tipEl = document.createElement('div');
+    tipEl.className = 'stamp-preview-tip';
+    tipEl.innerHTML = `
+        <div style="text-align: center; color: #666; padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 20px;">
+            <i class="fas fa-info-circle" style="font-size: 24px; color: #4a6baf; margin-bottom: 10px;"></i>
+            <p style="margin: 0; font-size: 16px; font-weight: 500;">请先选择年级、班级和学生查看具体的集章状态</p>
+            <p style="margin: 5px 0 0 0; font-size: 14px; color: #999;">以下显示所有榜样细则供参考</p>
+        </div>
+    `;
+    stampGrid.appendChild(tipEl);
+    
+    // 选择要显示的印章数据（默认显示一年级的印章）
+    let previewStampsData = stampsData;
+    
+    // 如果选择了特定年级，显示对应年级的印章
+    if (currentGrade === 'grade2') {
+        previewStampsData = grade2StampsData;
+    }
+    
+    // 根据类别筛选印章
+    const filteredStamps = currentCategory === 'all' 
+        ? previewStampsData 
+        : previewStampsData.filter(stamp => stamp.category === currentCategory);
+    
+    // 如果没有印章数据，显示提示
+    if (filteredStamps.length === 0) {
+        const noStampsEl = document.createElement('p');
+        noStampsEl.style.cssText = 'grid-column: 1/-1; text-align: center; color: #999; padding: 40px;';
+        noStampsEl.textContent = '该类别下暂无印章';
+        stampGrid.appendChild(noStampsEl);
+        return;
+    }
+    
+    // 渲染每个印章（预览模式）
+    filteredStamps.forEach(stamp => {
+        const stampEl = createStampElementForPreview(stamp);
+        stampGrid.appendChild(stampEl);
+    });
+}
+
+// 创建印章预览元素
+function createStampElementForPreview(stamp) {
+    const stampEl = document.createElement('div');
+    stampEl.className = 'stamp-item preview-mode';
+    stampEl.dataset.stampId = stamp.id;
+    
+    // 截取印章名称，如果太长则显示省略号
+    const displayName = stamp.name.length > 25 ? stamp.name.substring(0, 25) + '...' : stamp.name;
+    
+    stampEl.innerHTML = `
+        <div class="stamp-icon">
+            <i class="fas ${stamp.icon}"></i>
+        </div>
+        <div class="stamp-name" title="${stamp.name}">${displayName}</div>
+        <div class="stamp-category">${getCategoryName(stamp.category)}</div>
+        <div class="preview-overlay">
+            <i class="fas fa-eye"></i>
+        </div>
+    `;
+    
+    // 添加点击事件（只能查看，不能操作）
+    stampEl.addEventListener('click', () => {
+        openStampModalForPreview(stamp);
+    });
+    
+    return stampEl;
+}
+
+// 打开印章预览模态框
+function openStampModalForPreview(stamp) {
+    modalTitle.textContent = stamp.name;
+    modalStampImage.innerHTML = `<i class="fas ${stamp.icon}"></i>`;
+    modalDescription.textContent = stamp.description;
+    modalDate.textContent = '';
+    modalTeacher.textContent = '';
+    
+    // 隐藏操作按钮
+    awardStampBtn.style.display = 'none';
+    
+    // 清除模态框数据
+    modal.dataset.stampId = '';
+    modal.dataset.action = '';
+    
+    // 显示模态框
+    modal.style.display = 'flex';
 }
 
 // 创建印章元素
@@ -762,6 +1085,12 @@ function closeModalHandler() {
     // 重置按钮样式
     awardStampBtn.style.backgroundColor = '';
     awardStampBtn.disabled = false;
+    
+    // 清理教师端提示元素
+    const teacherTip = modal.querySelector('.teacher-modal-tip');
+    if (teacherTip) {
+        teacherTip.remove();
+    }
 }
 
 // 授予印章
@@ -1103,6 +1432,95 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// 处理家长端年级选择变化
+function handleParentGradeChange() {
+    const parentGrade = parentGradeSelect.value;
+    
+    // 更新全局变量（用于印章数据显示）
+    currentGrade = parentGrade;
+    
+    // 重置班级和学生选择
+    parentClassSelect.value = '';
+    currentClass = '';
+    currentStudentId = '';
+    studentSelect.value = '';
+    
+    // 更新班级选项
+    updateParentClassOptions();
+    
+    // 更新学生列表
+    updateStudentList();
+    
+    // 重新渲染印章和进度
+    renderStamps();
+    updateProgress();
+    
+    // 隐藏历史按钮
+    viewHistoryBtn.style.display = 'none';
+}
+
+// 更新家长端班级选择框的选项
+function updateParentClassOptions() {
+    // 清空现有选项
+    parentClassSelect.innerHTML = '<option value="">选择班级</option>';
+    
+    // 定义所有可能的班级（1班到10班）
+    const allPossibleClasses = [];
+    for (let i = 1; i <= 10; i++) {
+        allPossibleClasses.push(`class${i}`);
+    }
+    
+    // 获取已有学生的班级
+    const existingClasses = new Set();
+    Object.entries(studentsData).forEach(([id, student]) => {
+        // 如果选择了年级，只添加该年级下的班级
+        if (currentGrade && student.grade !== currentGrade) {
+            return;
+        }
+        existingClasses.add(student.class);
+    });
+    
+    // 添加所有可能的班级选项
+    allPossibleClasses.forEach(className => {
+        const option = document.createElement('option');
+        option.value = className;
+        
+        // 将内部值转换为显示值
+        const classNum = className.replace('class', '');
+        option.textContent = `${classNum}班`;
+        
+        // 如果该班级有学生，可以添加特殊样式或标记
+        if (existingClasses.has(className)) {
+            // 可以在这里添加特殊样式，例如加粗或不同颜色
+            option.style.fontWeight = 'bold';
+        }
+        
+        parentClassSelect.appendChild(option);
+    });
+}
+
+// 处理家长端班级选择变化
+function handleParentClassChange() {
+    const parentClass = parentClassSelect.value;
+    
+    // 更新全局变量
+    currentClass = parentClass;
+    
+    // 重置学生选择
+    currentStudentId = '';
+    studentSelect.value = '';
+    
+    // 更新学生列表
+    updateStudentList();
+    
+    // 重新渲染印章和进度
+    renderStamps();
+    updateProgress();
+    
+    // 隐藏历史按钮
+    viewHistoryBtn.style.display = 'none';
+}
+
 // 处理年级选择变化
 function handleGradeChange() {
     currentGrade = gradeSelect.value;
@@ -1191,7 +1609,17 @@ function handleExcelUpload(event) {
     // 添加确认提示 - 告知会清空历史数据
     const gradeName = getGradeName(currentGrade);
     const className = getClassName(currentClass);
-    const confirmMessage = `确认上传新的学生名单吗？\n\n⚠️ 重要提醒：\n上传新名单会清空 ${gradeName}${className} 所有学生的历史集章记录，包括：\n• 已获得的所有印章\n• 印章获得日期\n• 月度历史记录\n\n这个操作适用于新学期开始时重新集章。\n\n是否继续？`;
+    const confirmMessage = `确认上传新的学生名单吗？
+
+⚠️ 重要提醒：
+上传新名单会清空 ${gradeName}${className} 所有学生的历史集章记录，包括：
+• 已获得的所有印章
+• 印章获得日期
+• 月度历史记录
+
+这个操作适用于新学期开始时重新集章。
+
+是否继续？`;
     
     if (!confirm(confirmMessage)) {
         event.target.value = ''; // 用户取消，清空文件选择
@@ -1436,6 +1864,13 @@ function updateStudentList() {
     
     // 更新学生选择下拉框
     updateStudentSelectOptions(filteredStudents);
+    
+    // 在家长端显示学生数量提示
+    if (currentUserType === 'parent' && filteredStudents.length > 0) {
+        const gradeName = currentGrade ? getGradeName(currentGrade) : '所有年级';
+        const className = currentClass ? getClassName(currentClass) : '所有班级';
+        console.log(`${gradeName}${className}共有${filteredStudents.length}名学生`);
+    }
 }
 
 // 更新学生选择下拉框选项
@@ -1577,8 +2012,13 @@ function initializeMainInterface() {
     // 初始化界面
     updateUIForUserType();
     
-    // 初始化班级选项
-    updateClassOptions();
+    // 初始化班级选项（教师端）
+    if (currentUserType === 'teacher') {
+        updateClassOptions();
+    } else {
+        // 初始化家长端的班级选项
+        updateParentClassOptions();
+    }
     
     // 渲染印章网格
     renderStamps();

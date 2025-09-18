@@ -14,12 +14,12 @@
             <h1>榜样集章</h1>
             <div class="user-info">
                 <div class="user-type-toggle">
-                    <button id="teacherBtn" class="active">教师端</button>
-                    <button id="parentBtn">家长端</button>
+                    <button id="teacherBtn">教师端</button>
+                    <button id="parentBtn" class="active">家长端</button>
                 </div>
                 <div class="teacher-controls" id="teacherControls">
                     <div class="class-selection">
-                        <select id="gradeSelect">
+                        <select id="gradeSelect" class="form-control">
                             <option value="">选择年级</option>
                             <option value="grade1">一年级</option>
                             <option value="grade2">二年级</option>
@@ -28,7 +28,7 @@
                             <option value="grade5">五年级</option>
                             <option value="grade6">六年级</option>
                         </select>
-                        <select id="classSelect">
+                        <select id="classSelect" class="form-control">
                             <option value="">选择班级</option>
                             <option value="class1">1班</option>
                             <option value="class2">2班</option>
@@ -43,31 +43,61 @@
                         </select>
                     </div>
                     <div class="upload-section">
-                        <label for="excelUpload" class="upload-label">
+                        <label for="excelUpload" class="upload-label btn btn-success">
                             <i class="fas fa-file-excel"></i> 上传学生名单
                         </label>
                         <input type="file" id="excelUpload" accept=".xlsx, .xls" style="display: none;">
-                        <button id="resetStampsBtn" class="reset-stamps-btn">
+                        <button id="resetStampsBtn" class="btn btn-warning">
                             <i class="fas fa-redo"></i> 重新集章
                         </button>
-                        <button id="exportStatsBtn" class="export-stats-btn">
-                            <i class="fas fa-download"></i> 导出本学期集章统计表
+                        <button id="exportStatsBtn" class="btn btn-info">
+                            <i class="fas fa-download"></i> 导出统计表
                         </button>
                     </div>
                 </div>
+                <div class="parent-controls" id="parentControls" style="display: none;">
+                    <div class="parent-class-selection">
+                        <select id="parentGradeSelect" class="form-control" title="选择年级" aria-label="选择孩子所在年级">
+                            <option value="">选择年级</option>
+                            <option value="grade1">一年级</option>
+                            <option value="grade2">二年级</option>
+                            <option value="grade3">三年级</option>
+                            <option value="grade4">四年级</option>
+                            <option value="grade5">五年级</option>
+                            <option value="grade6">六年级</option>
+                        </select>
+                        <select id="parentClassSelect" class="form-control" title="选择班级" aria-label="选择孩子所在班级">
+                            <option value="">选择班级</option>
+                            <option value="class1">1班</option>
+                            <option value="class2">2班</option>
+                            <option value="class3">3班</option>
+                            <option value="class4">4班</option>
+                            <option value="class5">5班</option>
+                            <option value="class6">6班</option>
+                            <option value="class7">7班</option>
+                            <option value="class8">8班</option>
+                            <option value="class9">9班</option>
+                            <option value="class10">10班</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="student-selection">
-                    <div class="student-search">
-                        <input type="text" id="studentSearch" placeholder="搜索学生...">
-                        <i class="fas fa-search"></i>
+                    <div class="search-input-group">
+                        <input type="text" id="studentSearch" class="form-control" placeholder="搜索学生...">
+                        <i class="fas fa-search search-icon"></i>
                     </div>
                     <div class="user-select">
-                        <select id="studentSelect">
+                        <select id="studentSelect" class="form-control">
                             <option value="">选择学生</option>
                             <option value="student1">张小明</option>
                             <option value="student2">李小红</option>
                             <option value="student3">王小华</option>
+                            <option value="student4">赵小丽</option>
+                            <option value="student5">刘小强</option>
+                            <option value="student6">陈小美</option>
+                            <option value="student7">孙小勇</option>
                         </select>
-                        <button id="viewHistoryBtn" class="view-history-btn" style="display: none;">
+                        <button id="viewHistoryBtn" class="btn btn-info btn-sm" style="display: none;">
                             <i class="fas fa-history"></i> 查看历史
                         </button>
                     </div>
@@ -97,23 +127,23 @@
             <div class="stamp-categories">
                 <h2>榜样类别</h2>
                 <div class="category-tabs">
-                    <button class="category-tab active" data-category="all">全部</button>
-                    <button class="category-tab" data-category="study">学习榜样</button>
-                    <button class="category-tab" data-category="behavior">文明榜样</button>
-                    <button class="category-tab" data-category="teamwork">纪律榜样</button>
-                    <button class="category-tab" data-category="responsibility">劳动榜样</button>
-                    <button class="category-tab" data-category="unity">团结榜样</button>
-                    <button class="category-tab" data-category="honesty">诚信榜样</button>
-                    <button class="category-tab" data-category="habit">习惯榜样</button>
+                    <button class="category-tab btn active" data-category="all">全部</button>
+                    <button class="category-tab btn" data-category="study">学习榜样</button>
+                    <button class="category-tab btn" data-category="behavior">文明榜样</button>
+                    <button class="category-tab btn" data-category="teamwork">纪律榜样</button>
+                    <button class="category-tab btn" data-category="responsibility">劳动榜样</button>
+                    <button class="category-tab btn" data-category="unity">团结榜样</button>
+                    <button class="category-tab btn" data-category="honesty">诚信榜样</button>
+                    <button class="category-tab btn" data-category="habit">习惯榜样</button>
                 </div>
                 <div class="batch-operations" id="batchOperations" style="display: none;">
                     <div class="batch-info">
                         <span id="batchStampName">选中的印章</span>
                         <span class="batch-controls">
-                            <button id="batchAwardBtn" class="btn-batch-award">
+                            <button id="batchAwardBtn" class="btn btn-success">
                                 <i class="fas fa-users"></i> 批量标记全班已完成
                             </button>
-                            <button id="cancelBatchBtn" class="btn-cancel-batch">
+                            <button id="cancelBatchBtn" class="btn btn-danger">
                                 <i class="fas fa-times"></i> 取消批量
                             </button>
                         </span>
@@ -127,7 +157,7 @@
         </main>
 
         <footer>
-            <p>© 2023 榜样集章 - 记录每一个成长瞬间</p>
+            <p>© 榜样集章 - 记录每一个成长瞬间</p>
         </footer>
     </div>
 
@@ -145,7 +175,7 @@
                 <div class="stamp-teacher" id="modalTeacher"></div>
             </div>
             <div class="modal-footer">
-                <button id="awardStampBtn" class="btn-primary">已完成</button>
+                <button id="awardStampBtn" class="btn btn-primary">已完成</button>
             </div>
         </div>
     </div>
@@ -169,8 +199,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="cancelResetBtn" class="btn-secondary">取消</button>
-                <button id="confirmResetBtn" class="btn-danger">确认重置</button>
+                <button id="cancelResetBtn" class="btn btn-secondary">取消</button>
+                <button id="confirmResetBtn" class="btn btn-danger">确认重置</button>
             </div>
         </div>
     </div>
@@ -206,8 +236,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id="cancelBatchAwardBtn" class="btn-secondary">取消</button>
-                <button id="confirmBatchAwardBtn" class="btn-primary">确认批量标记已完成</button>
+                <button id="cancelBatchAwardBtn" class="btn btn-secondary">取消</button>
+                <button id="confirmBatchAwardBtn" class="btn btn-primary">确认批量标记已完成</button>
             </div>
         </div>
     </div>
@@ -228,7 +258,7 @@
     </div>
 
     <!-- 教师登录模态框 -->
-    <div class="modal" id="teacherLoginModal" style="display: block;">
+    <div class="modal" id="teacherLoginModal" style="display: none;">
         <div class="modal-content login-modal">
             <div class="modal-header login-header">
                 <h2>教师端登录</h2>
@@ -250,8 +280,8 @@
                 </div>
             </div>
             <div class="modal-footer login-footer">
-                <button id="loginBtn" class="btn-primary login-btn">登录</button>
-                <button id="switchToParentBtn" class="btn-secondary">切换到家长端</button>
+                <button id="loginBtn" class="btn btn-primary btn-lg login-btn">登录</button>
+                <button id="switchToParentBtn" class="btn btn-secondary">切换到家长端</button>
             </div>
         </div>
     </div>
